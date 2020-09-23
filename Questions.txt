@@ -1,0 +1,3 @@
+I am getting confused how tables work.
+
+Resource: https://stackoverflow.com/questions/43773927/javascript-array-to-html-table

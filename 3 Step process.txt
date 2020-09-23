@@ -1,0 +1,25 @@
+Step One - Planning
+
+what HTML would be useful for the game board itself?
+- Table (Row and Columns)
+- Div (adding for adding and removing colors)
+
+how could you represent a played-piece in the HTML board?
+- By using a div 
+
+in the JavaScript, what would be a good structure for the in-memory game board?
+
+- 2D Array data structure: 7 indexed arrays, 6 arrays = board array let
+	- TR and TD elements
+	- TR = Index Array
+	- TD = 6 arrays
+
+- add a div element in specified row/column of the tr element with add event listener
+- have a const variable called blue
+- have a const variable called red
+- select the table element with queryselector and put it in a cost variable called table
+- select the div element using getelementby id and name it colorDiv. Usimg getelemntbyid because I will be appending
+- 
+
+what might the flow of the game be?
+
