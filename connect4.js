@@ -11,8 +11,24 @@
 // in the JavaScript, what would be a good structure for the in-memory game board?
 
 // - 2D Array data structure: 7 indexed arrays, 6 arrays = board array
-let board = [];
 
+
+// ARRAY SHOULD LOOK LIKE THIS:
+
+/**
+    [
+    Index[0]-table-row-h: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
+    Index[1]-table-row-7: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
+    Index[2]-table-row-6: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
+    Index[3]-table-row-6: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
+    Index[4]-table-row-4: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
+    Index[5]-table-row-3: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
+    Index[6]-table-row-2: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
+    Index[7]-table-row-1: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
+    ]
+ */
+
+let board = []; 
 const rows = 7;
 const columns = 6;
 
@@ -28,36 +44,22 @@ const player2 =2;//Red
 // - select the table element with queryselector and put it in a cost variable called table
 
 
-function makeHTMLBoard(){
+function makeHTMLBoard()
+{
     // - select the div element using getelementby id and name it colorDiv. Using getelemntbyid because I will be appending
     const table = document.getElementById('table');
-
+    const topRow = document.getElementById('table-row-head');
     //Clickable Top
     let divRow = document.getElementById('table-row'); //tr
     let divCol = document.getElementById('table-col'); //td
 
-    divRow.addEventListener('click', handleClick);
-
-    for(let x = 0; x <= rows; x++)
-    {
-        divRow.appendChild(divCol);
-    }
+    topRow.addEventListener('click', handleClick);
 
     table.appendChild(divRow);
 
       // make main part of board
 
-      let boardIndex = 0;
-    for(let y = 0; y < rows; y++){
-        let newRow = document.createElement('tr');
-
-        for (let x = 0; x < columns; x++) {
-            let newCell = document.createElement('td');
-            newCell.setAttribute('id', `${y} - ${x}`);
-            newRow.append(newCell);
-        }
-        board.append(newRow);
-    }
+     
 }
 
 
