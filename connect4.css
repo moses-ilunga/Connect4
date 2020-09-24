@@ -1,11 +1,22 @@
 #table td{
     width: 50px;
     height: 50px;
+    border-radius: 50%;
     border: solid 1px #777;
 }
 
 #table tr{
     width: 50px;
     height: 50px;
+    border-radius: 50%;
     border: solid 1px #777;
+}
+
+#table-row-head td{
+    border: dashed 1px red;
+
+}
+
+#table-row-head td:hover{
+    background-color: green;
 }
