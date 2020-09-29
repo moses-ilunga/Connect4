@@ -1,101 +1,154 @@
-
-// Step One - Planning
-
-// what HTML would be useful for the game board itself?
-// - Table (Row and Columns)
-// - Div (adding for adding and removing colors)
-
-// how could you represent a played-piece in the HTML board?
-// - By using a div 
-
-// in the JavaScript, what would be a good structure for the in-memory game board?
-
-// - 2D Array data structure: 7 indexed arrays, 6 arrays = board array
-
-
-// ARRAY SHOULD LOOK LIKE THIS:
-
-/**
-    [
-    Index[0]-table-row-h: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
-    Index[1]-table-row-7: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
-    Index[2]-table-row-6: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
-    Index[3]-table-row-6: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
-    Index[4]-table-row-4: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
-    Index[5]-table-row-3: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
-    Index[6]-table-row-2: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
-    Index[7]-table-row-1: [table-col-6, table-col-5, table-col-4, table-col-3, table-col-2, table-col-1],
-    ]
+/** Connect Four
+ *
+ * Player 1 and 2 alternate turns. On each turn, a piece is dropped down a
+ * column until a player gets four-in-a-row (horiz, vert, or diag) or until
+ * board fills (tie)
  */
 
-let board = []; 
-const rows = 7;
-const columns = 6;
+var WIDTH = 7;
+var HEIGHT = 6;
 
-// 	- TR and TD elements
-// 	- TR = Index Array
-// 	- TD = 6 arrays
+var currPlayer = 1; // active player: 1 or 2
+var board = []; // array of rows, each row is array of cells  (board[y][x])
 
-// - add a div element in specified row/column of the tr element with add event listener
-// - have a const variable called blue
-const player1 =1;//Blue
-// - have a const variable called red
-const player2 =2;//Red
-// - select the table element with queryselector and put it in a cost variable called table
+/** makeBoard: create in-JS board structure:
+ *    board = array of rows, each row is array of cells  (board[y][x])
+ */
 
-
-function makeHTMLBoard()
-{
-    // - select the div element using getelementby id and name it colorDiv. Using getelemntbyid because I will be appending
-    const table = document.getElementById('table');
-    const topRow = document.getElementById('table-row-head');
-    //Clickable Top
-    let divRow = document.getElementById('table-row'); //tr
-    let divCol = document.getElementById('table-col'); //td
-
-    topRow.addEventListener('click', handleClick);
-
-    table.appendChild(divRow);
-
-      // make main part of board
-
-     
+function makeBoard() {
+  // TODO: set "board" to empty HEIGHT x WIDTH matrix array
+  for(let i = 0; i < HEIGHT; i++){
+    board.push(Array.from({ length: WIDTH}));
+  }
 }
 
+/** makeHtmlBoard: make HTML table and row of column tops. */
 
+function makeHtmlBoard() {
+  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
+  let htmlBoard = document.getElementById('board');
+  // TODO: add comment for this code
+  var top = document.createElement("tr"); // Creates a Table row
+  top.setAttribute("id", "column-top"); //Set's the ID of the new table row to 'column-top
+  top.addEventListener("click", handleClick); // Listneing for a click on the top row
 
-//Game Board (Array)
-// let board = [];
-// //Player
-// let player = 1;
-// //Get Table
-// //Board Specs
-// const rows = 7;
-// const columns = 6;
+  for (var x = 0; x < WIDTH; x++) {
+    var headCell = document.createElement("td"); //creating a cell the first Column cell
+    headCell.setAttribute("id", x); //Setting the attribute to the first column cell to ID and giving it a number using the x iterator
+    top.append(headCell); //Appending the headcell (column) to the first row, then it does it again until it x = WIDTH
+  }
+  htmlBoard.append(top); //appending the top row which now has columns to the htmlBoard (array)
 
-// function HTMLBoard(){
-//     let table = document.getElementById('table');
-//     let tableHead = table.createTHead();
+  // TODO: add comment for this code
+  for (var y = 0; y < HEIGHT; y++) { 
+    const row = document.createElement("tr"); //Creating the next row
+    for (var x = 0; x < WIDTH; x++) { 
+      const cell = document.createElement("td"); //creating the next column under the row
+      cell.setAttribute("id", `${y}-${x}`); //setting the ID of the column to the current number of WIDTH - HEIGHT because height is less than width
+      row.append(cell); //append the column (cell) to the new row
+    }
+    htmlBoard.append(row); //append the row (tr) to the htmlBoard (array)
+  }
+}
 
-//     let tableRow = document.createElement('tr');
- 
+/** findSpotForCol: given column x, return top empty y (null if filled) */
 
-//     let tableColumn = document.createElement('td');
+function findSpotForCol(x) {
+  // TODO: write the real version of this, rather than always returning 0
+  for(let i = HEIGHT - 1; i >= 0; i--) //Height -1 because the first row is the playing piece
+  if(!board[i][x]){
+    return i;
+  }
+  return 0;
+}
 
+/** placeInTable: update DOM to place piece into HTML table of board */
 
-//     //let tableBody = document.createElement('tbody');
+function placeInTable(y, x) {
+  // TODO: make a div and insert into correct table cell
+  let newDiv = document.createElement('div'); //Created DIV element
+  newDiv.classList.add('piece'); //Adding the div element to have a class of 'piece'
+  newDiv.classList.add(`p${currPlayer}`); //adding another class to div for p1 or p2 (player 1 or 2)
+  newDiv.style.top = -50 * (y+2); //Possioning the div
 
-//     for(let x = 0; x <= rows; x++)
-//     {
-//         table.appendChild(tableRow);
+  const findSpot = document.getElementById(`${y}-${x}`);
+  findSpot.append(newDiv);
+}
 
-//         for(let y = 0; y < columns; y++){
-//             table.appendChild(tableColumn);
-//         }
-//     }
-//     table.append(tableBody);
-// }
+/** endGame: announce game end */
 
-// HTMLboard();
+function endGame(msg) {
+  // TODO: pop up alert message
+  return alert(msg);
+}
 
+/** handleClick: handle click of column top to play piece */
 
+function handleClick(evt) {
+  // get x from ID of clicked cell
+  var x = +evt.target.id;
+
+  // get next spot in column (if none, ignore click)
+  var y = findSpotForCol(x);
+  if (y === null) {
+    return;
+  }
+
+  // place piece in board and add to HTML table
+  // TODO: add line to update in-memory board
+  board[y][x] = currPlayer;
+  placeInTable(y, x);
+
+  // check for win
+  if (checkForWin()) {
+    endGame(`Player ${currPlayer} won!`);
+    return location.reload();
+  }
+
+  // check for tie
+  // TODO: check if all cells in board are filled; if so call, call endGame
+  if(board.every(row => row.every(cell => cell))){
+    return endGame('TIE');
+  }
+  // switch players
+  // TODO: switch currPlayer 1 <-> 2
+
+  currPlayer = currPlayer === 1 ? 2 : 1;
+}
+
+/** checkForWin: check board cell-by-cell for "does a win start here?" */
+
+function checkForWin() {
+  function _win(cells) {
+    // Check four cells to see if they're all color of current player
+    //  - cells: list of four (y, x) cells
+    //  - returns true if all are legal coordinates & all match currPlayer
+
+    return cells.every(
+      ([y, x]) =>
+        y >= 0 &&
+        y < HEIGHT &&
+        x >= 0 &&
+        x < WIDTH &&
+        board[y][x] === currPlayer
+    );
+  }
+
+  // TODO: read and understand this code. Add comments to help you.
+
+  for (var y = 0; y < HEIGHT; y++) { //Working with columns
+    for (var x = 0; x < WIDTH; x++) { //Working with the rows of the columns
+      var horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]]; // Bcause the ID's for the columns are 1 - 6, the horizontal variable has every tr element with it's perspective column (td) element
+      var vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]]; // This vertical variable holds every column (td) element with its persepctive row (tr) element
+      var diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]]; //This is going diagonally to the right by getting the first initial td and tr, then adding 1 to the ID's of the tr and td's which allows us to move diagonally
+      var diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]]; //This is going diagonally to the left by getting the first initial td and tr, then adding 1 to col (td) ID and subtracting 1 from the row (tr) ID in order for us to move diagonally to the left
+
+      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+        return true;
+      }
+    }
+  }
+}
+
+makeBoard();
+makeHtmlBoard();
